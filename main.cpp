@@ -18,34 +18,90 @@ string rtrim(const string &);
 
 //737
 
+int Partition(vector<int>&vec, int low, int high)
+{
+    int pivot = vec[high];
+
+    int i = low-1;
+    for(int j = low; j<high; j++)
+    {
+        if(vec[j]>pivot)
+        {
+            i++;
+            int temp = vec[i];
+            vec[i] = vec[j];
+            vec[j] = temp;
+        }
+    }
+    int t = vec[i+1];
+    vec[i+1] = vec[high];
+    vec[high] = t;
+
+    return i+1;
+
+}
+
+void quicksort(vector<int>& vec, int low, int high)
+{
+    if(low<high)
+    {
+        int pi = Partition(vec, low , high);
+
+        quicksort(vec, low, pi-1);
+        quicksort(vec, pi+1, high);
+    }
+}
+
 int numPlayers(int k, vector<int> scores) 
 {
-
-    bool swapped;
     int rnum = 1;
     int num = k;
     vector<int> rank;
-    for(int i = 0; i < scores.size()-1; i++)
-    {
-        swapped = false;
-        for(int a = scores.size()-1; a >= 1+i ; a--)
-        {
-            if(scores[a-1] < scores[a])
-            {
-                int temp = scores[a-1];
-                scores[a-1] = scores[a];
-                scores[a] = temp;
-                swapped = true;
-            }
-        }
-        if(!swapped)
-        {
-            break;
-        }
-    }
+    //bubble sort
+    // bool swapped;
+    // for(int i = 0; i < scores.size()-1; i++)
+    // {
+    //     swapped = false;
+    //     for(int a = scores.size()-1; a >= 1+i ; a--)
+    //     {
+    //         if(scores[a-1] < scores[a])
+    //         {
+    //             int temp = scores[a-1];
+    //             scores[a-1] = scores[a];
+    //             scores[a] = temp;
+    //             swapped = true;
+    //         }
+    //     }
+    //     if(!swapped)
+    //     {
+    //         break;
+    //     }
+    // }
+
+    //selection sort
+    // int index;
+    // for(int i = 0 ; i< scores.size()-1; i++)
+    // {
+    //     index = i;
+    //     for(int a = i+1; a < scores.size(); a++)
+    //     {
+    //         if(scores[index] < scores[a])
+    //         {
+    //             index = a;
+    //         }
+    //     }
+    //     int temp = scores[i];
+    //     scores[i] = scores[index];
+    //     scores[index] = temp;
+    // }
+
+    //quicksort
+    quicksort(scores, 0, scores.size()-1);
+
       
     for(int a = 0; a<scores.size(); a++)
     {
+        cout << scores[a] << "\n";
         rank.push_back(rnum);
         rnum ++;
         if( a != scores.size()-1)
@@ -73,9 +129,13 @@ int numPlayers(int k, vector<int> scores)
 
 }
 
+
+
+
+
 int main()
 {
-    ifstream in("input004.txt");
+    ifstream in("testing.txt");
 
     string k_temp;
     getline(in, k_temp);
@@ -101,6 +161,8 @@ int main()
     int result = numPlayers(k, scores);
 
     cout << result << "\n";
+
+
 
     return 0;
 }
